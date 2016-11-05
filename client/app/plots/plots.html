@@ -1,0 +1,26 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+<div class="container">
+  <div class="row">
+<div class="panel panel-default">
+  <!-- Default panel contents -->
+  <div class="panel-heading">All plots</div>
+
+  <!-- Table -->
+  <table class="table">
+	<tr>
+		<th>Plot No.</th>
+		<th>Plot size</th>
+		<th>In use?</th>
+	</tr>
+	<div class="checkbox-inline">
+	<label><input type="checkbox" ng_model="showInUse">Show plots in use<label>
+	</div>
+	<tr ng-repeat="plot in plots | inUsePlots:showInUse">
+		<td>{{plot.number}}</td>
+		<td>{{plot.size}}</td>
+		<td>{{plot.in_use}}</td>
+	</tr>
+  </table>
+</div>
+</div>
+</div>

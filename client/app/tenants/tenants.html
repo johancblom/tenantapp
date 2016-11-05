@@ -1,0 +1,61 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+<div class="container">
+  <div class="row">
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">All tenants</div>
+
+      <!-- Table -->
+      <table class="table">
+        <tr>
+          <th>Title</th>
+          <th>Initials</th>
+          <th>Surname</th>
+          <th>Plots</th>
+        </tr>
+        <tr ng-repeat="tenant in tenants">
+          <td>{{tenant.title}}</td>
+          <td>{{tenant.initials}}</td>
+          <td>{{tenant.surname}}</td>
+          <td><span ng-repeat="plot in tenant.plots"> {{plot.number}} </span></td>
+          <td>
+            <button ng-click="startEdit(tenant)" class="btn btn-xs btn-primary">Edit Tenant</button>
+            <button ng-click="startEditPlots(tenant)" class="btn btn-xs btn-primary">Edit Plots</button>
+            <button ng-click="deleteTenant(tenant)" class="btn btn-xs btn-primary">Delete</button>
+          </td>
+        </tr>
+        <tr ng-class="{danger: editedTenant}">
+          <td><input ng-model="editedTenant.title" required/></td>
+          <td><input ng-model="editedTenant.initials" required /></td>
+          <td><input ng-model="editedTenant.surname" required/></td>
+          <td>
+            <button ng-hide="editedTenant._id" ng-click="createTenant(editedTenant)"
+                    class="btn btn-xs btn-primary">Create
+            </button>
+            <button ng-show="editedTenant._id" ng-click="updateTenant(editedTenant)"
+                    class="btn btn-xs btn-primary">Save
+            </button>
+            <button ng-show="editedTenant" ng-click="cancelEdit()"
+                    class="btn btn-xs btn-primary">Cancel
+            </button>
+          </td>
+        </tr>
+      </table>
+
+      <div ng-show="editedPlots.length" class="panel panel-default">
+        <p>Tenant {{plotTenant.surname}} has {{editedPlots.length}} plots. Do you wish to remove  any of them? If so, select it in the following dropdown: </p>
+        <select ng-model="data.plotRemoved" ng-options="editedPlot.number for editedPlot in editedPlots track by editedPlot._id"></select>
+        <button ng-click="removePlotFromTenant(plotTenant, data.plotRemoved)" class="btn btn-xs btn-primary">Confirm</button>
+      </div>
+
+      <div ng-show="editedPlots.length < 4" class="panel panel-default">
+        <p>Tenant {{plotTenant.surname}} can have {{ 4 - editedPlots.length}} more plots. Do you wish to add any? If so, select it in the following dropdown: </p>
+        <select ng-model="data.plotAdded" ng-options="availablePlot.number for availablePlot in data.availablePlots track by availablePlot._id"></select>
+        <button ng-click="addPlotToTenant(plotTenant, data.plotAdded)" class="btn btn-xs btn-primary">Confirm</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+</div>
