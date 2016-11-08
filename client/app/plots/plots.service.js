@@ -18,6 +18,12 @@ angular.module('tenantappApp')
         },
         findByNumber: function(plots) {
           return $filter('filter')(example_plots, {number: '72a'} || {number: '7a'});
+        },
+        save: function (plot) {
+          example_plots.filter(function(v) {
+            console.log("Checking: " + v._id + " against: " + plot._id);
+            return v._id === plot._id;
+          })[0].in_use = plot.in_use;
         }
       }
     }
