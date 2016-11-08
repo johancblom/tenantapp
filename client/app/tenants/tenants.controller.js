@@ -9,15 +9,12 @@ angular.module('tenantappApp')
     $scope.availablePlots = $filter('inUsePlots')(Plot.query());
 
     $scope.deleteTenant = function (tenant) {
-      Tenant.delete().then(function () {
-        $scope.tenants.splice($scope.tenants.indexOf(tenant), 1);
-      });
+      Tenant.delete(tenant);
     }
 
     $scope.updateTenant = function (tenant) {
-      $scope.tenants[$scope.tenants.map(function(t) { return t._id}).indexOf(tenant._id)] = tenant;
+      Tenant.update(tenant);
       $scope.editedTenant = null;
-      $scope.myForm.myTitle.$touched = false;
     }
 
     $scope.createTenant = function (tenant) {

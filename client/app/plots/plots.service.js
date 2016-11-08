@@ -2,6 +2,7 @@
 
 angular.module('tenantappApp')
   .factory('Plot', function($filter) {
+      var last_id = 6;
       var example_plots =
         [
           {_id: 1, number: '7a', size: 2.5, in_use: true},
@@ -16,14 +17,39 @@ angular.module('tenantappApp')
         query: function () {
           return example_plots;
         },
+        get: function(params) {
+          var result = {};
+          angular.forEach(example_plots, function (plot) {
+            if (plot._id == params._id)
+              return this.plot = plot;
+          }, result);
+          return result.plot;
+        },
+        delete: function(params) {
+          angular.forEach(example_plots, function(plot, index) {
+            if (plot._id == params._id) {
+              example_plots.splice(index, 1);
+              return;
+            }
+          })
+        },
         findByNumber: function(plots) {
           return $filter('filter')(example_plots, {number: '72a'} || {number: '7a'});
         },
-        save: function (plot) {
-          example_plots.filter(function(v) {
-            console.log("Checking: " + v._id + " against: " + plot._id);
-            return v._id === plot._id;
-          })[0].in_use = plot.in_use;
+        update: function(plot) {
+          var item = this.get(plot);
+          if (!item) return false;
+
+          item.number = plot.number;
+          item.size = plot.size;
+          item.in_use = plot.in_use;
+
+          return true;
+        },
+
+        create: function(plot) {
+          plot._id = ++last_id;
+          example_plots.push(plot);
         }
       }
     }
