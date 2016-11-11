@@ -52,17 +52,19 @@ angular.module('tenantappApp')
       $scope.plotTenant.plots = angular.copy($scope.editedPlots);
       $scope.editedPlots.map(function(plot) {
         plot.in_use = true;
-        Plot.save(plot);
-      })
+        Plot.update(plot);
+      });
       $scope.availablePlots.map(function(plot) {
         plot.in_use = false;
-        Plot.save(plot);
-      })
-    }
+        Plot.update(plot);
+      });
+      $scope.editedPlots = null;
+    };
 
     $scope.cancelEditPlots = function() {
       $scope.editedTenant = null;
-    }
+      $scope.editedPlots = null;
+    };
 
 
     $scope.removePlotFromTenant=function(tenant, plot) {
@@ -70,38 +72,13 @@ angular.module('tenantappApp')
       $scope.editedPlots.splice($scope.editedPlots.map(function(e) { return e.number}).indexOf(plot.number), 1);
       $scope.plotTenant.plots=angular.copy($scope.editedPlots);
       $scope.plotRemoved = {};
-    }
+    };
 
     $scope.addPlotToTenant=function(tenant, plot) {
       $scope.editedPlots.push(plot);
       $scope.plotTenant.plots=angular.copy($scope.editedPlots);
     }
 
-    $scope.todos = [
-      {text: 'learn angular', done: true},
-      {text: 'build an angular app', done: false}
-    ];
-
-    $scope.addTodo = function () {
-      $scope.todos.push({text: $scope.todoText, done: false});
-      $scope.todoText = '';
-    };
-
-    $scope.remaining = function () {
-      var count = 0;
-      angular.forEach($scope.todos, function (todo) {
-        count += todo.done ? 0 : 1;
-      });
-      return count;
-    };
-
-    $scope.archive = function () {
-      var oldTodos = $scope.todos;
-      $scope.todos = [];
-      angular.forEach(oldTodos, function (todo) {
-        if (!todo.done) $scope.todos.push(todo);
-      });
-    };
   })
   .constant('ngSortableConfig', {onEnd: function() {
     console.log('default onEnd()');
