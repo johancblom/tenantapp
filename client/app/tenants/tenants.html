@@ -7,7 +7,7 @@
       <div class="panel-heading">All tenants</div>
 
       <!-- Table -->
-      <table class="table" style="width:100%; table-layout: fixed; white-space: nowrap">
+      <table id="tenants" class="table">
         <tr>
           <th>Title</th>
           <th>Initials</th>
@@ -15,10 +15,10 @@
           <th>Plots</th>
         </tr>
         <tr ng-repeat="tenant in tenants">
-          <td style="width:10%">{{tenant.title}}</td>
-          <td style="width:10%">{{tenant.initials}}</td>
-          <td style="width:10%">{{tenant.surname}}</td>
-          <td style="width:10%"><span ng-repeat="plot in tenant.plots"> {{plot.number}} </span></td>
+          <td>{{tenant.title}}</td>
+          <td>{{tenant.initials}}</td>
+          <td>{{tenant.surname}}</td>
+          <td><span ng-repeat="plot in tenant.plots"> {{plot.number}} </span></td>
           <td style="width: 60%">
             <button ng-click="startEdit(tenant)" class="btn btn-xs btn-primary">Edit Tenant</button>
             <button ng-click="startEditPlots(tenant)" class="btn btn-xs btn-primary">Edit Plots</button>
@@ -26,10 +26,10 @@
           </td>
         </tr>
         <tr ng-form="myForm" ng-class="{danger: editedTenant}">
-          <td style="width:10%"><input style="width:100%" name="myTitle" novalidate ng-model="editedTenant.title" required/></td>
-          <td style="width:10%"><input style="width:100%" name="myInitials" novalidate ng-model="editedTenant.initials" required /></td>
-          <td style="width:10%"><input style="width:100%" name="mySurname" novalidate ng-model="editedTenant.surname" required/></td>
-          <td style="width:10%"></td>
+          <td><input name="myTitle" novalidate ng-model="editedTenant.title" required/></td>
+          <td><input name="myInitials" novalidate ng-model="editedTenant.initials" required /></td>
+          <td><input name="mySurname" novalidate ng-model="editedTenant.surname" required/></td>
+          <td></td>
           <td style="width: 60%">
             <button ng-hide="editedTenant._id" ng-disabled="myForm.$invalid" ng-click="createTenant(editedTenant)"
                     class="btn btn-xs btn-primary">Create
@@ -44,14 +44,17 @@
         </tr>
       </table>
       <!-- Angular -->
-      <div id="tenantplots"  ng-show="editedPlots" style="margin-top: 100px; width: 25%; height: 150px; display: inline-block">
-        <div style="margin-left: 10px">
-          <div>
-            <div style="width: 50%; float: left; font-weight: 700;" data-force="5">Tenant's Plots</div>
-            <div style="width: 50%; float: left; font-weight: 700;" data-force="5">Available Plots</div>
-          </div>
-          <div style="width: 50%; float: left;" class="block__list_words">
-            <div ng-controller="TodoController">
+      <div class="panel panel-default"   height="100%" ng-show="editedPlots">
+        <div class="panel-heading">
+          Plots
+        </div>
+        <div class="panel-body">
+          <div class="block__list_words">
+            <div >
+              <div style="width: 50%; float: left; font-weight: 700;" data-force="5">Tenant's Plots</div>
+              <div style="width: 50%; float: left; font-weight: 700;" data-force="5">Available Plots</div>
+            </div>
+            <div style="width: 50%; float: left;" ng-controller="TodoController">
               <ul ng-sortable="{ group: 'todo', animation: 150 }" class="list-group" style="min-height: 40px;">
                 <li class="list-group-item" ng-repeat="plot in editedPlots">
                   <span>{{plot.number}}</span>
@@ -60,8 +63,8 @@
             </div>
           </div>
 
-          <div style="width: 50%; float: left;" class="block__list_words">
-            <div ng-controller="TodoControllerNext">
+          <div class="block__list_words">
+            <div style="width: 50%; float: left;" ng-controller="TodoControllerNext">
               <ul ng-sortable="sortableConfig" class="list-group" style="min-height: 40px;">
                 <li class="list-group-item" ng-repeat="plot in availablePlots">
                   <span>{{plot.number}}</span>
@@ -69,19 +72,50 @@
               </ul>
             </div>
           </div>
-          <div style="clear: both"></div>
+          <div ng-show="editedPlots">
+            <button ng-click="updatePlots(editedTenant)"
+                    class="btn btn-xs btn-primary">Save
+            </button>
+            <button ng-click="cancelEditPlots()"
+                    class="btn btn-xs btn-primary">Cancel
+            </button>
+          </div>
         </div>
+      </div>
 
-      </div>
-      <div ng-show="editedPlots" style="margin-top: 152px; height: 150px; width: 25%; display: inline-block; vertical-align: top">
-        <button ng-click="updatePlots(editedTenant)"
-                class="btn btn-xs btn-primary">Save
-        </button>
-        <button ng-click="cancelEditPlots()"
-                class="btn btn-xs btn-primary">Cancel
-        </button>
-      </div>
     </div>
+
   </div>
 </div>
+<div ng-controller="ModalDemoCtrl as $ctrl" class="modal-demo">
+  <script type="text/ng-template" id="myModalContent.html">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
+    </div>
+    <div class="modal-body" id="modal-body">
+      <ul>
+        <li ng-repeat="item in $ctrl.items">
+          <a href="#" ng-click="$event.preventDefault(); $ctrl.selected.item = item">{{ item }}</a>
+        </li>
+      </ul>
+      Selected: <b>{{ $ctrl.selected.item }}</b>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
+    </div>
+  </script>
+  <script type="text/ng-template" id="stackedModal.html">
+    <div class="modal-header">
+      <h3 class="modal-title" id="modal-title-{{name}}">The {{name}} modal!</h3>
+    </div>
+    <div class="modal-body" id="modal-body-{{name}}">
+      Having multiple modals open at once is probably bad UX but it's technically possible.
+    </div>
+  </script>
+  <!-- Button trigger modal -->
+  <button type="button" ng-click="$ctrl.open()" class="btn btn-default">
+    Launch demo modal
+  </button>
 </div>
+

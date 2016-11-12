@@ -6,7 +6,7 @@ angular.module('tenantappApp')
 
     $scope.plotChanged =  {};
     $scope.plotRemoved = {},
-    $scope.availablePlots = $filter('inUsePlots')(Plot.query());
+      $scope.availablePlots = $filter('inUsePlots')(Plot.query());
 
     $scope.deleteTenant = function (tenant) {
       Tenant.delete(tenant);
@@ -129,4 +129,52 @@ angular.module('tenantappApp')
     'Start End Add Update Remove Sort'.split(' ').forEach(function (name) {
       $scope.sortableConfig['on' + name] = console.log.bind(console, name);
     });
-  }]);;
+  }])
+  .controller('ModalDemoCtrl', function ($modal, $log, $document) {
+    var $ctrl = this;
+    $ctrl.items = ['item1', 'item2', 'item3'];
+
+    $ctrl.animationsEnabled = true;
+
+    $ctrl.open = function (size, parentSelector) {
+      var parentElem = parentSelector ?
+        angular.element($document[0].querySelector('.modal-demo ' + parentSelector)) : undefined;
+      var modalInstance = $modal.open({
+        animation: $ctrl.animationsEnabled,
+        ariaLabelledBy: 'modal-title',
+        ariaDescribedBy: 'modal-body',
+        templateUrl: 'myModalContent.html',
+        controller: 'ModalInstanceCtrl',
+        controllerAs: '$ctrl',
+        size: size,
+        appendTo: parentElem,
+        resolve: {
+          items: function () {
+            return $ctrl.items;
+          }
+        }
+      });
+
+      modalInstance.result.then(function (selectedItem) {
+        $ctrl.selected = selectedItem;
+      }, function () {
+        $log.info('Modal dismissed at: ' + new Date());
+      });
+    };
+  })
+  .controller('ModalInstanceCtrl', function ($modalInstance, items) {
+    var $ctrl = this;
+    $ctrl.items = items;
+    $ctrl.selected = {
+      item: $ctrl.items[0]
+    };
+
+    $ctrl.ok = function () {
+      $modalInstance.close($ctrl.selected.item);
+    };
+
+    $ctrl.cancel = function () {
+      $modalInstance.dismiss('cancel');
+    };
+  });
+
