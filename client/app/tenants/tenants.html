@@ -9,10 +9,10 @@
       <!-- Table -->
       <table id="tenants" class="table">
         <tr>
-          <th>Title</th>
-          <th>Initials</th>
-          <th>Surname</th>
-          <th>Plots</th>
+          <th id="title">Title</th>
+          <th id="initials">Initials</th>
+          <th id="surname">Surname</th>
+          <th id="plots">Plots</th>
         </tr>
         <tr ng-repeat="tenant in tenants">
           <td>{{tenant.title}}</td>
@@ -20,6 +20,7 @@
           <td>{{tenant.surname}}</td>
           <td><span ng-repeat="plot in tenant.plots"> {{plot.number}} </span></td>
           <td style="width: 60%">
+            <button ng-click="details(tenant)" class="btn btn-xs btn-primary">Details</button>
             <button ng-click="startEdit(tenant)" class="btn btn-xs btn-primary">Edit Tenant</button>
             <button ng-click="startEditPlots(tenant)" class="btn btn-xs btn-primary">Edit Plots</button>
             <button ng-click="deleteTenant(tenant)" class="btn btn-xs btn-primary">Delete</button>
@@ -87,30 +88,7 @@
 
   </div>
 </div>
-<div ng-controller="ModalCtrl as $ctrl" class="modal-demo">
-  <script type="text/ng-template" id="myModalContent.html">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modal-title">I'm a modal!</h3>
-    </div>
-    <div class="modal-body" id="modal-body">
-      {{tenants | json}}
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="$ctrl.ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="$ctrl.cancel()">Cancel</button>
-    </div>
-  </script>
-  <script type="text/ng-template" id="stackedModal.html">
-    <div class="modal-header">
-      <h3 class="modal-title" id="modal-title-{{name}}">The {{name}} modal!</h3>
-    </div>
-    <div class="modal-body" id="modal-body-{{name}}">
-      Having multiple modals open at once is probably bad UX but it's technically possible.
-    </div>
-  </script>
-  <!-- Button trigger modal -->
-  <button type="button" ng-click="$ctrl.open()" class="btn btn-default">
-    Launch demo modal
-  </button>
-</div>
+
+
+
 

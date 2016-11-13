@@ -1,7 +1,7 @@
 'use strict';
 
 angular.module('tenantappApp')
-  .controller('TenantsCtrl', function ($scope, $filter, Tenant, Plot) {
+  .controller('TenantsCtrl', function ($scope, $filter, Tenant, Plot, Modal) {
     $scope.tenants = Tenant.query();
 
     $scope.plotChanged =  {};
@@ -15,6 +15,27 @@ angular.module('tenantappApp')
     $scope.updateTenant = function (tenant) {
       Tenant.update(tenant);
       $scope.editedTenant = null;
+    }
+
+    function getFields(input, field) {
+      var output = [];
+      for (var i=0; i < input.length; ++i) {
+        output.push(input[i][field]);
+      }
+      console.log(input.length);
+      console.log(output.length);
+      return output;
+    }
+
+    $scope.details = function(tenant) {
+      Modal.details(tenant, '<p>Here are the details for tenant <strong>' + tenant.surname + '</strong>:</p>' +
+        '<p>' + 'Title: ' + tenant.title + '</p>' +
+        '<p>' + 'Initials: ' + tenant.initials + '</p>' +
+        '<p>' + 'Surname: ' + tenant.surname + '</p>' +
+        '<p>' + 'Street: ' + tenant.street + '</p>' +
+        '<p>' + 'Town: ' + tenant.town + '</p>' +
+        '<p>' + 'Plots: ' + getFields(tenant.plots, 'number').reduce(function(a,b) { return (a + " " + b)}, " ") + '</p>' +
+        '<p>' + 'Concessionary: ' + tenant.concess + '</p>');
     }
 
     $scope.createTenant = function (tenant) {

@@ -244,10 +244,13 @@ img {
   white-space: nowrap
 }
 
-#tenants td {
-  width: 10%;
+#tenants th#title {
+  width: 5%;
 }
 
+#tenants th#initials {
+  width: 10%;
+}
 #tenants td input {
   width: 100%;
 }

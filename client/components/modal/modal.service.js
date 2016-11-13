@@ -72,6 +72,29 @@ angular.module('tenantappApp')
             });
           };
         }
+      },
+      details: function() {
+          var args = Array.prototype.slice.call(arguments),
+            tenant = args.shift(),
+            html = args.shift(),
+            detailsModal;
+          detailsModal = openModal({
+            modal: {
+              dismissable: true,
+              title: 'Tenant details',
+              html: html,
+              buttons: [{
+                classes: 'btn-default',
+                text: 'Ok',
+                click: function (e) {
+                  detailsModal.dismiss(e);
+                }
+              }]
+            }
+          }, 'modal-default');
+
+          detailsModal.result.then(function (event) {
+          })
+        }
       }
-    };
   });
